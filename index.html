@@ -26,6 +26,12 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+
+    <!-- Lenis Core CSS -->
+<link rel="stylesheet" href="https://unpkg.com/lenis@1.1.20/dist/lenis.css">
+
+<!-- Lenis Core JS -->
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css"
@@ -4139,6 +4145,52 @@
       toggleMenu(false);
     }
   });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Initialize Lenis Scroller
+  const lenis = new Lenis({
+    duration: 1.2,        // Scroll speed/duration in seconds (higher = smoother)
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing curve
+    direction: 'vertical', // 'vertical' or 'horizontal'
+    gestureDirection: 'vertical',
+    smoothWheel: true,     // Enable smooth scrolling on mouse wheel
+    wheelMultiplier: 1,    // Mouse wheel sensitivity
+    touchMultiplier: 2,    // Touch devices sensitivity
+    infinite: false,
+  });
+
+  // 2. Request Animation Frame Loop to drive Lenis
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // 3. Smooth Anchor Link Scrolling (e.g., #project, #residences, #leadform)
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      const targetId = this.getAttribute("href");
+      
+      // Skip empty links or javascript dummy links
+      if (!targetId || targetId === "#") return;
+
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        e.preventDefault();
+
+        // Scroll smoothly to target using Lenis API
+        lenis.scrollTo(targetElement, {
+          offset: -80, // Offset for sticky navbar height so headers aren't covered
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        });
+      }
+    });
+  });
+
+  // Expose lenis instance globally in case you need it in other scripts
+  window.lenis = lenis;
 });
     </script>
 
