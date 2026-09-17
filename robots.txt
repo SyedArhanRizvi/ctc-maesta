@@ -1,0 +1,24 @@
+# User-agent rules for all web crawlers
+User-agent: *
+Allow: /
+Allow: /thank-you
+
+# Specific rules for search engine crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Allow AI & LLM Search Agents (Perplexity, ChatGPT, Claude)
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# XML Sitemap Location
+Sitemap: https://crcmaesta.properties/sitemap.xml
